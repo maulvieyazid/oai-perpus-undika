@@ -29,11 +29,17 @@ $data = [
     'request' => [
         '_attributes' => [
             'verb' => $verb,
-            'metadataPrefix' => $metadataPrefix,
         ],
         '_value' => "{$http}://{$host}{$script_name}",
     ],
 ];
+
+// Kalo query param "metadataPrefix" nya ada isinya, maka tambahkan ke attribute request
+if (!!$metadataPrefix) {
+    $data['request']['_attributes'] = [
+        'metadataPrefix' => $metadataPrefix
+    ];
+}
 
 
 if ($verb == 'ListRecords') {
