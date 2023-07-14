@@ -1,0 +1,11 @@
+{
+
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    },
+    "require": {
+        "spatie/array-to-xml": "^3.1"
+    }
+}
