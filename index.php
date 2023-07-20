@@ -3,16 +3,14 @@
 require_once "vendor/autoload.php";
 
 require_once "helper/helper.php";
+require_once "helper/url.php";
 
 $helper = new Helper\Helper;
+$url = new Helper\URL;
 
 use Spatie\ArrayToXml\ArrayToXml;
 
 date_default_timezone_set('Asia/Jakarta');
-
-$http = $_SERVER['REQUEST_SCHEME'];
-$host = $_SERVER['HTTP_HOST'];
-$script_name = $_SERVER['SCRIPT_NAME'];
 
 $now = date_create('now');
 $now = $now->format('Y-m-d\TH:i:s\Z');
@@ -30,7 +28,7 @@ $data = [
         '_attributes' => [
             'verb' => $verb,
         ],
-        '_value' => "{$http}://{$host}{$script_name}",
+        '_value' => $url->getUrl(),
     ],
 ];
 
@@ -41,7 +39,9 @@ if (!!$metadataPrefix) {
     ];
 }
 
-
+/* ==================================================================== */
+/* PENGECEKAN QUERY PARAM VERB NYA */
+/* ==================================================================== */
 if ($verb == 'ListRecords') {
     include_once "verb/listrecords.php";
 }
@@ -66,6 +66,9 @@ if ($verb == 'ListMetadataFormats') {
 if ($verb == 'ListIdentifiers') {
     include_once "verb/listidentifiers.php";
 }
+/* ==================================================================== */
+/* AKHIR PENGECEKAN QUERY PARAM VERB NYA */
+/* ==================================================================== */
 
 // Settingan untuk root element dan XML declaration nya
 $arrayToXml = new ArrayToXml(
