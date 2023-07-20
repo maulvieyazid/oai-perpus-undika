@@ -1,27 +1,26 @@
 <?php
 
-
 /* NOTE : FORMAT XML NYA NIRU / DUPLIKASI DARI SLIMS */
 // Tambahkan isian Identify ke array $data
 $data['Identify'] = [
-    'repositoryName' => 'Senayan',
-    'baseURL' => 'http://localhost/slims9.6.1/slims9.6.1/oai2.php',
+    'repositoryName' => 'Library Undika',
+    'baseURL' => $url->getUrl(),
     'protocolVersion' => '2.0',
-    'earliestDatestamp' => '2011-01-01T00:00:00Z',
+    'earliestDatestamp' => '2023-07-20T09:05:00Z',
     'deletedRecord' => 'transient',
     'granularity' => 'YYYY-MM-DDThh:mm:ssZ',
-    'adminEmail' => 'some.one@contact.com',
+    'adminEmail' => 'perpus@dinamika.ac.id',
     'description' => [
         'oai-identifier' => [
             '_attributes' => [
                 'xmlns' => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
                 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai-identifier                    http://www.openarchives.org/OAI/2.0/oai-identifier.xsd',
+                'xsi:schemaLocation' => "http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd",
             ],
             'scheme' => 'oai',
-            'repositoryIdentifier' => 'localhost',
+            'repositoryIdentifier' => 'library.dinamika.ac.id',
             'delimiter' => ':',
-            'sampleIdentifier' => 'oai:localhost:slims-1',
+            'sampleIdentifier' => 'oai:library.dinamika.ac.id:3505',
         ],
     ],
 ];
