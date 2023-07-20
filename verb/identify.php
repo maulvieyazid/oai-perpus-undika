@@ -1,5 +1,7 @@
 <?php
 
+$url = new Helper\URL;
+
 /* NOTE : FORMAT XML NYA NIRU / DUPLIKASI DARI SLIMS */
 // Tambahkan isian Identify ke array $data
 $data['Identify'] = [

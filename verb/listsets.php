@@ -1,5 +1,7 @@
 <?php
 
+$helper = new Helper\Helper;
+
 /* NOTE : FORMAT XML NYA NIRU / DUPLIKASI DARI REPOSITORY */
 // Tambahkan isian ListSets ke array $data
 $data['ListSets'] = [

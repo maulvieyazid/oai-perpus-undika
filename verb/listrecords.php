@@ -1,5 +1,7 @@
 <?php
 
+$helper = new Helper\Helper;
+
 /* NOTE : FORMAT XML NYA NIRU / DUPLIKASI DARI SLIMS */
 // karena file ini digunakan untuk mengisi GetRecord dan ListRecords, 
 // maka key array nya menggunakan verb nya langsung
