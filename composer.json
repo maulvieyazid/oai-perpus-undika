@@ -1,11 +1,13 @@
 {
-
-    "config": {
-        "allow-plugins": {
-            "kylekatarnls/update-helper": true
-        }
-    },
     "require": {
-        "spatie/array-to-xml": "^3.1"
+        "spatie/array-to-xml": "^3.1",
+        "adodb/adodb-php": "^5.22",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Helper\\": "helper",
+            "Core\\": "core"
+        }
     }
 }

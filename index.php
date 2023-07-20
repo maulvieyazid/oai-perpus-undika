@@ -1,11 +1,7 @@
 <?php
+// Ini adalah file entri untuk semua dependensi
+require_once "app.php";
 
-require_once "vendor/autoload.php";
-
-require_once "helper/helper.php";
-require_once "helper/url.php";
-
-$helper = new Helper\Helper;
 $url = new Helper\URL;
 
 use Spatie\ArrayToXml\ArrayToXml;
@@ -15,9 +11,9 @@ date_default_timezone_set('Asia/Jakarta');
 $now = date_create('now');
 $now = $now->format('Y-m-d\TH:i:s\Z');
 
-$metadataPrefix = isset($_GET['metadataPrefix']) ? $_GET['metadataPrefix'] : '';
+$metadataPrefix = $_GET['metadataPrefix'] ?? '';
 
-$verb = isset($_GET['verb']) ? $_GET['verb'] : '';
+$verb = $_GET['verb'] ?? '';
 
 /**
  * Variabel $data ini sebagai wadah penampung untuk konten XML OAI
