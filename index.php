@@ -2,8 +2,6 @@
 // Ini adalah file entri untuk semua dependensi
 require_once "app.php";
 
-$url = new Helper\URL;
-
 use Spatie\ArrayToXml\ArrayToXml;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -24,7 +22,7 @@ $data = [
         '_attributes' => [
             'verb' => $verb,
         ],
-        '_value' => $url->getUrl(),
+        '_value' => Helper\URL::getUrl(),
     ],
 ];
 

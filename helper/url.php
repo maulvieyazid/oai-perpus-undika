@@ -25,7 +25,7 @@ class URL
 
     function getRequestUri()
     {
-        /* Output : /example.com/index.php?coba=coba&foo=bar */
+        /* Output : /index.php?coba=coba&foo=bar */
         return $_SERVER["REQUEST_URI"];
     }
 
@@ -37,19 +37,28 @@ class URL
 
     function getRequestUriWithoutQuery()
     {
-        /* Output : /example.com/index.php */
+        /* Output : /index.php */
         return strtok($_SERVER["REQUEST_URI"], '?');
     }
 
-    function getUrl()
+    static function getUrl($full = false)
     {
+        $url = new self;
+
+        // Jika full
+        if ($full) {
+            /* Output : https://example.com/index.php?coba=coba&foo=bar */
+            return "{$url->getScheme()}://{$url->getHost()}{$url->getRequestUri()}";
+        }
+
+        // Jika tidak full, maka tanpa query param
         /* Output : https://example.com/index.php */
-        return "{$this->getScheme()}://{$this->getHost()}{$this->getRequestUriWithoutQuery()}";
+        return "{$url->getScheme()}://{$url->getHost()}{$url->getRequestUriWithoutQuery()}";
     }
 
-    function getFullUrl()
+    static function getFullUrl()
     {
         /* Output : https://example.com/index.php?coba=coba&foo=bar */
-        return "{$this->getUrl()}?{$this->getQueryParam()}";
+        return self::getUrl(true);
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-$url = new Helper\URL;
-
 /* NOTE : FORMAT XML NYA NIRU / DUPLIKASI DARI SLIMS */
 // Tambahkan isian Identify ke array $data
 $data['Identify'] = [
     'repositoryName' => 'Library Undika',
-    'baseURL' => $url->getUrl(),
+    'baseURL' => Helper\URL::getUrl(),
     'protocolVersion' => '2.0',
     'earliestDatestamp' => '2023-07-20T09:05:00Z',
     'deletedRecord' => 'transient',
