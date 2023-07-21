@@ -24,8 +24,5 @@ $dotenv->load();
 // Jika file encrypt-secret-key.txt tidak ada
 // maka generate file tersebut
 if (!file_exists(__DIR__ . '/encrypt-secret-key.txt')) {
-    // Generate secret key dari package Defuse
-    $key = Defuse\Crypto\Key::createNewRandomKey()->saveToAsciiSafeString();
-    // Taruh secret key di file
-    file_put_contents('encrypt-secret-key.txt', $key);
+    Helper\Helper::regenerateEncryptionKeyConfig();
 }
