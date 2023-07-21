@@ -67,7 +67,7 @@ if ($verb == 'ListIdentifiers') {
 // Settingan untuk root element dan XML declaration nya
 $arrayToXml = new ArrayToXml(
     $data,
-    [
+    $rootElement = [
         'rootElementName' => 'OAI-PMH',
         '_attributes' => [
             'xmlns' => 'http://www.openarchives.org/OAI/2.0/',
@@ -75,9 +75,9 @@ $arrayToXml = new ArrayToXml(
             'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd',
         ]
     ],
-    true,
-    'UTF-8',
-    '1.0',
+    $replaceSpacesByUnderScoresInKeyNames = true,
+    $xmlEncoding = 'UTF-8',
+    $xmlVersion = '1.0',
 );
 
 // Menambahkan processing instruction agar bisa membaca file oai2.xsl
