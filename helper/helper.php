@@ -9,6 +9,19 @@ class Helper
         return substr(bin2hex(random_bytes(16)), 0, 7);
     }
 
+    function parseDatetoGranularity($datestring)
+    {
+        $datestring = trim((string) $datestring);
+
+        // Kalo datestring nya kosong, maka return string kosong
+        if (!$datestring) return '';
+
+        // Kalo datestring nya '-', maka return string kosong
+        if ($datestring == '-') return '';
+
+        return date_create($datestring)->format('Y-m-d\TH:i:s\Z');
+    }
+
     static function loadEncryptionKeyFromConfig()
     {
         // Ambil isi dari file secret key

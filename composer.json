@@ -8,7 +8,8 @@
     "autoload": {
         "psr-4": {
             "Helper\\": "helper",
-            "Core\\": "core"
+            "Core\\": "core",
+            "Model\\": "model"
         }
     }
 }

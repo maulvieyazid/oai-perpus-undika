@@ -20,7 +20,7 @@ $data['Identify'] = [
             'scheme' => 'oai',
             'repositoryIdentifier' => 'library.dinamika.ac.id',
             'delimiter' => ':',
-            'sampleIdentifier' => 'oai:library.dinamika.ac.id:3505',
+            'sampleIdentifier' => 'oai:library.dinamika.ac.id:book-3505',
         ],
     ],
 ];
