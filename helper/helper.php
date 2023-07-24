@@ -19,6 +19,8 @@ class Helper
         // Kalo datestring nya '-', maka return string kosong
         if ($datestring == '-') return '';
 
+        // Bentuk date dan kembalikan string seperti berikut :
+        // 2010-06-03T00:00:00Z
         return date_create($datestring)->format('Y-m-d\TH:i:s\Z');
     }
 
