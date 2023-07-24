@@ -1,5 +1,6 @@
 <?php
 
+use Helper\OAIPMH;
 use Model\Buku;
 
 $helper = new Helper\Helper;
@@ -9,33 +10,20 @@ $verb = $_GET['verb'] ?? '';
 // Init Connection
 $db = Core\DB::setConnection('oracle');
 
-// UNTUK SEMENTARA
-// SELECT BUKU NYA DULU, NANTI BARU DIRAPIIN LAGI
+// Fungsi getIdentifier() digunakan untuk mengambil identifier pada query param
+// Identifier digunakan untuk mengambil satu data katalog saja
+// dikarenakan ada 4 data katalog yang akan ditampilkan dalam OAI ini sehingga perlu dipisahkan berdasarkan tipe katalog nya
+// 4 data katalog tsb adalah Buku, Majalah, Software, TA (Tugas Akhir)
+$getIdentifier = (object) OAIPMH::getIdentifier();
 
-$tipe_katalog = null;
+$tipe_katalog = $getIdentifier->tipe_katalog;
 
-// Cek apakah ada query param "identifier"
-$identifier = $_GET['identifier'] ?? '';
-
-// Kalo ada, maka
-if ($identifier) {
-    // Contoh isi dari identifier
-    // oai:library.dinamika.ac.id:book-23530
-
-    // Pecah identifier nya berdasarkan string ':'
-    $identifier = explode(':', $identifier);
-
-    // Ambil item yang paling akhir, itu adalah identifier asli yg dibutuhkan
-    $real_identifier = end($identifier);
-
-    // Ambil tipe katalog berdasarkan 4 huruf awal identifier
-    $tipe_katalog = substr($real_identifier, 0, 4);
-
-    // Ambil id katalog yang berupa angka pada identifier yang dimulai dari huruf ke 5
-    $id_katalog = substr($real_identifier, 5);
-}
+$id_katalog = $getIdentifier->id_katalog;
 
 
+/* ============================================================================== */
+/* KATALOG BUKU */
+/* ============================================================================== */
 $whereInduk = null;
 
 // Jika tipe katalog nya adalah buku, maka tambahkan where induk
@@ -63,9 +51,7 @@ $sql = <<<SQL
 SQL;
 
 
-/* ============================================== */
-/* PENGELOLAAN PARAM BINDING BUKU */
-/* ============================================== */
+/* Pengelolaan Parameter Binding untuk query Buku */
 $paramBinding = [
     'MIN_ROW' => 1,
     'MAX_ROW' => 25,
@@ -76,12 +62,19 @@ if ($whereInduk) {
     $paramBinding['INDUK'] = $id_katalog;
 }
 
-/* ============================================== */
-/* AKHIR PENGELOLAAN PARAM BINDING BUKU */
-/* ============================================== */
 
-// Jalankan query
-$result = $db->GetAll($sql, $paramBinding);
+/** NOTE : Untuk meningkatkan performa aplikasi
+ * maka sebelum menjalankan query perlu dilakukan pengecekan terlebih dahulu terhadap tipe katalog
+ */
+// Jalankan query hanya jika :
+// - Tipe Katalog nya kosong
+// OR
+// - Tipe Katalog nya adalah buku
+$result = [];
+
+if (!$tipe_katalog || $tipe_katalog == Buku::TIPE) {
+    $result = $db->GetAll($sql, $paramBinding);
+}
 
 
 foreach ($result as $buku) {
@@ -131,97 +124,18 @@ foreach ($result as $buku) {
     ];
 }
 
+/* ============================================================================== */
+/* AKHIR KATALOG BUKU */
+/* ============================================================================== */
 
-/* $data[$verb] = [
-    'record' => [
-        [
-            'header' => [
-                'identifier' => 'oai:localhost:slims-1',
-                'datestamp' => '2007-11-29T15:36:50Z',
-                'setSpec' => '2004',
-            ],
-            'metadata' => [
-                'oai_dc:dc' => [
-                    '_attributes' => [
-                        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
-                        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-                    ],
-                    'dc:title' => 'PHP 5 for dummies',
-                    'dc:creator' => [
-                        'Valade, Janet',
-                    ],
-                    'dc:subject' => [
-                        'Website',
-                        'Programming',
-                        '005.13/3 22',
-                    ],
-                    "__custom:dc\\:subject:{$helper->random_unique_id()}" => 'Cobacoba 1',
-                    "__custom:dc\\:subject:{$helper->random_unique_id()}" => 'Cobacoba 2',
-                    'dc:publisher' => 'Wiley',
-                    'dc:date' => '2004',
-                    'dc:language' => 'en',
-                    'dc:type' => 'Text',
-                    'dc:identifier' => [
-                        'http://localhost/slims9.6.1//index.php?p=show_detail&amp;id=1',
-                        '005.13/3-22 Jan p',
-                        'http://localhost/slims9.6.1//lib/minigalnano/createthumb.php?filename=images/docs/php5_dummies.jpg&amp;width=200',
-                    ],
-                    'dc:identifier_isbn' => '0764541668',
-                    'dc:coverage' => 'Hoboken, NJ',
-                    'dc:source' => 'For dummies',
-                    'dc:format' => 'xiv, 392 p. : ill. ; 24 cm.',
-                ],
-            ],
-        ],
-        [
-            'header' => [
-                'identifier' => 'oai:localhost:slims-2',
-                'datestamp' => '2007-11-29T15:53:35Z',
-                'setSpec' => '2005',
-            ],
-            'metadata' => [
-                'oai_dc:dc' => [
-                    '_attributes' => [
-                        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
-                        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-                    ],
-                    'dc:title' => 'Linux In a Nutshell',
-                    'dc:creator' => [
-                        'Siever, Ellen',
-                        'Love, Robert',
-                        'Robbins, Arnold',
-                        'Figgins, Stephen',
-                        'Weber, Aaron',
-                    ],
-                    'dc:subject' => [
-                        'Computer',
-                        'Linux',
-                        'Operating System',
-                    ],
-                    'dc:publisher' => 'OReilly',
-                    'dc:date' => '2005',
-                    'dc:language' => 'en',
-                    'dc:type' => 'Text',
-                    'dc:identifier' => [
-                        'http://localhost/slims9.6.1//index.php?p=show_detail&amp;id=2',
-                        '005.4/32-22 Ell l',
-                        'http://localhost/slims9.6.1//lib/minigalnano/createthumb.php?filename=images/docs/linux_in_a_nutshell.jpg&amp;width=200',
-                    ],
-                    'dc:identifier_isbn' => '9780596009304',
-                    'dc:coverage' => 'Sebastopol, CA',
-                    'dc:source' => 'In a Nutshell',
-                    'dc:format' => 'xiv, 925 p. : ill. ; 23 cm.',
-                    "__custom:dc\\:subject:{$helper->random_unique_id()}" => '005.4/32 22',
-                ],
-            ],
-        ],
-    ]
-]; */
 
+/* ============================================================================== */
+/* KATALOG MAJALAH */
+/* ============================================================================== */
+
+/* ============================================================================== */
+/* AKHIR KATALOG MAJALAH */
+/* ============================================================================== */
 
 // Untuk menambahkan resumption token
 $data[$verb]['resumptionToken'] = 'cobaobaobcoabaob';
