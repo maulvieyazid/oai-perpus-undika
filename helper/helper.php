@@ -2,6 +2,8 @@
 
 namespace Helper;
 
+use DateTime;
+
 class Helper
 {
     function random_unique_id()
@@ -9,9 +11,13 @@ class Helper
         return substr(bin2hex(random_bytes(16)), 0, 7);
     }
 
-    function parseDatetoGranularity($datestring)
+    function parseDateStringToGranularity($datestring)
     {
-        $datestring = trim((string) $datestring);
+        // Kalo datestring nya bertipe DateTime, maka jadikan string
+        // kalo bukan, berarti string, lakukan trim dan cast agar lebih pasti
+        $datestring = ($datestring instanceof DateTime)
+            ? $datestring->format('Y-m-d H:i:s')
+            : trim((string) $datestring);
 
         // Kalo datestring nya kosong, maka return string kosong
         if (!$datestring) return '';

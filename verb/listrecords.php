@@ -95,7 +95,7 @@ foreach ($result as $buku) {
     $data[$verb]["__custom:record:{$helper->random_unique_id()}"] = [
         'header' => [
             'identifier' => "oai:library.dinamika.ac.id:book-{$buku->INDUK}",
-            'datestamp'  => $helper->parseDatetoGranularity($buku->TGL_DATANG),
+            'datestamp'  => $helper->parseDateStringToGranularity($buku->TGL_DATANG),
             'setSpec'    => $buku->TH_TERBIT ?? '',
         ],
         'metadata' => [
@@ -150,7 +150,7 @@ foreach ($result as $buku) {
 // Untuk menambahkan resumption token
 $data[$verb]['resumptionToken'] = [
     '_attributes' => [
-        'expirationDate' => $helper->parseDatetoGranularity('tomorrow'),
+        'expirationDate' => $helper->parseDateStringToGranularity('tomorrow'),
         'completeListSize' => 43836,
         'cursor' => 0,
     ],

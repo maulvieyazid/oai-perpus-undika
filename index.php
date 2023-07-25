@@ -6,8 +6,7 @@ use Spatie\ArrayToXml\ArrayToXml;
 
 date_default_timezone_set('Asia/Jakarta');
 
-$now = date_create('now');
-$now = $now->format('Y-m-d\TH:i:s\Z');
+$now = (new Helper\Helper)->parseDateStringToGranularity('now');
 
 $metadataPrefix = $_GET['metadataPrefix'] ?? '';
 
