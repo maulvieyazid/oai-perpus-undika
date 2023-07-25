@@ -15,10 +15,18 @@ $db = Core\DB::setConnection('oracle');
 // dikarenakan ada 4 data katalog yang akan ditampilkan dalam OAI ini sehingga perlu dipisahkan berdasarkan tipe katalog nya
 // 4 data katalog tsb adalah Buku, Majalah, Software, TA (Tugas Akhir)
 $getIdentifier = (object) OAIPMH::getIdentifier();
-
 $tipe_katalog = $getIdentifier->tipe_katalog;
-
 $id_katalog = $getIdentifier->id_katalog;
+
+
+// Fungsi getResumptionToken() digunakan untuk melakukan parsing resumptionToken pada query param
+// dan menggenerate resumptionToken selanjutnya
+// resumptionToken ini sebenarnya adalah nilai limit dan offset untuk query data katalog
+// resumptionToken ini diencrypt sehingga lebih aman
+$resumptionToken =  (object) OAIPMH::getResumptionToken();
+$min_row = $resumptionToken->min_row;
+$max_row = $resumptionToken->max_row;
+$next_resumption_token = $resumptionToken->next_resumption_token;
 
 
 /* ============================================================================== */
@@ -53,8 +61,8 @@ SQL;
 
 /* Pengelolaan Parameter Binding untuk query Buku */
 $paramBinding = [
-    'MIN_ROW' => 1,
-    'MAX_ROW' => 25,
+    'MIN_ROW' => $min_row,
+    'MAX_ROW' => $max_row,
 ];
 
 // Masukkan id katalog sebagai param "INDUK", jika where induk nya tidak kosong
@@ -73,6 +81,8 @@ if ($whereInduk) {
 $result = [];
 
 if (!$tipe_katalog || $tipe_katalog == Buku::TIPE) {
+
+    // Jalankan Query
     $result = $db->GetAll($sql, $paramBinding);
 }
 
@@ -86,7 +96,7 @@ foreach ($result as $buku) {
         'header' => [
             'identifier' => "oai:library.dinamika.ac.id:book-{$buku->INDUK}",
             'datestamp'  => $helper->parseDatetoGranularity($buku->TGL_DATANG),
-            'setSpec'    => $buku->TH_TERBIT,
+            'setSpec'    => $buku->TH_TERBIT ?? '',
         ],
         'metadata' => [
             // Seluruh attribut yang perlu ditampilkan pada OAI ini adalah hasil diskusi / kesepakatan dengan mas Agung Perpus
@@ -99,11 +109,11 @@ foreach ($result as $buku) {
                     'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
                 ],
                 'dc:relation' => Buku::getLinkDetil($buku->INDUK),
-                'dc:title' => $buku->JUDUL,
+                'dc:title' => $buku->JUDUL ?? '-',
                 'dc:creator' => Buku::getSemuaAuthor($buku->PENGARANG1, $buku->PENGARANG2, $buku->PENGARANG3),
                 'dc:subject' => [
                     ...(Buku::getSemuaAuthor($buku->SUBYEK1, $buku->SUBYEK2)),
-                    $buku->DDC,
+                    $buku->DDC ?? '-',
                 ],
                 'dc:publisher' => $buku->PENERBIT ?? '-',
                 'dc:date' => $buku->TH_TERBIT ?? '-',
@@ -138,4 +148,11 @@ foreach ($result as $buku) {
 /* ============================================================================== */
 
 // Untuk menambahkan resumption token
-$data[$verb]['resumptionToken'] = 'cobaobaobcoabaob';
+$data[$verb]['resumptionToken'] = [
+    '_attributes' => [
+        'expirationDate' => $helper->parseDatetoGranularity('tomorrow'),
+        'completeListSize' => 43836,
+        'cursor' => 0,
+    ],
+    '_value' => $next_resumption_token,
+];
