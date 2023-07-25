@@ -57,4 +57,16 @@ trait KatalogTrait
         // Jika kosong, maka kembalikan array dengan satu item string '-'
         return count($out) ? $out : ['-'];
     }
+
+    static function getSemuaAuthor(...$pengarang)
+    {
+        // Untuk mengambil semua author, maka perlu untuk membuang yg nilainya null / string kosong
+        return self::filterEmpty(...$pengarang);
+    }
+
+    static function getSemuaSubject(...$subject)
+    {
+        // Untuk mengambil semua subject, maka perlu untuk membuang yg nilainya null / string kosong
+        return self::filterEmpty(...$subject);
+    }
 }

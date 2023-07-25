@@ -32,10 +32,4 @@ class Buku
         // [DDC] spasi [3 huruf depan Pengarang 1] spasi [1 huruf depan judul buku]
         return strtolower("$ddc $substrpengarang1 $substrjudul");
     }
-
-    static function getSemuaAuthor(...$pengarang)
-    {
-        // Untuk mengambil semua author, maka perlu untuk membuang yg nilainya null / string kosong
-        return self::filterEmpty(...$pengarang);
-    }
 }
