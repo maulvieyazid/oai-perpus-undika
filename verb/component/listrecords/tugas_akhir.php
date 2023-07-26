@@ -7,6 +7,9 @@ use Model\TugasAkhir;
 /* ============================================================================== */
 
 $whereInduk = null;
+$whereThTerima = null;
+
+$set = $_GET['set'] ?? null;
 
 // Jika tipe katalog nya adalah tugas akhir, maka tambahkan where induk
 // ini untuk memfilter data tugas akhir berdasarkan id induk nya
@@ -14,15 +17,29 @@ if ($tipe_katalog == TugasAkhir::TIPE) {
     $whereInduk = "AND a.induk = :INDUK";
 }
 
+// Jika ada query param "set", maka tambahkan where th_terima
+// ini untuk memfilter data tugas akhir berdasarkan th_terima
+// WARNING : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
+if (isset($_GET['set'])) {
+    // Susun where nya
+    // Jika set nya tidak null, maka query nya menggunakan parameter
+    // Jika set nya null, maka query nya menggunakan IS NULL
+    $whereThTerima = ($set)
+        ? "AND TO_CHAR(tgl_terima, 'YYYY') = :TH_TERIMA"
+        : 'AND tgl_terima IS NULL';
+}
+
 // Query Tugas Akhir
 $sql = <<<SQL
      SELECT * FROM (
         SELECT x.*, ROWNUM rnum FROM (
             SELECT urut_olah, induk, jddc, ddc, judul, pengarang, pengarang2, pengarang3, pengarang4, pengarang5, 
-                   kota, th_terbit, subyek, subyek2, keterangan, pembimbing1, pembimbing2, tgl_terima, bahasa, penerbit
+                   kota, th_terbit, subyek, subyek2, keterangan, pembimbing1, pembimbing2, tgl_terima, bahasa, penerbit,
+                   TO_CHAR(tgl_terima, 'YYYY') AS th_terima
             FROM b_ta a
             WHERE (status IS NULL OR status ='P' OR status ='*' OR status ='D' OR status ='G')
               $whereInduk
+              $whereThTerima
         ) x WHERE rownum <= :MAX_ROW
     ) WHERE rnum >= :MIN_ROW
 SQL;
@@ -36,6 +53,11 @@ $paramBinding = [
 // Masukkan id katalog sebagai param "INDUK", jika where induk nya tidak kosong
 if ($whereInduk) {
     $paramBinding['INDUK'] = $id_katalog;
+}
+
+// Masukkan set sebagai param "TH_TERIMA", jika where th terima nya tidak kosong
+if ($whereThTerima) {
+    $paramBinding['TH_TERIMA'] = $set;
 }
 
 
@@ -64,7 +86,7 @@ foreach ($result as $tugas) {
         'header' => [
             'identifier' => "oai:library.dinamika.ac.id:{$tipe}-{$tugas->INDUK}",
             'datestamp'  => $helper->parseDateStringToGranularity($tugas->TGL_TERIMA),
-            'setSpec'    => $tugas->TGL_TERIMA ?? '',
+            'setSpec'    => $tugas->TH_TERIMA ?? '',
         ],
         'metadata' => [
             // Seluruh attribut yang perlu ditampilkan pada OAI ini adalah hasil diskusi / kesepakatan dengan mas Agung Perpus

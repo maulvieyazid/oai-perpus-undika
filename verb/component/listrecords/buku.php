@@ -8,11 +8,25 @@ use Model\Buku;
 /* ============================================================================== */
 
 $whereInduk = null;
+$whereThTerbit = null;
+
+$set = $_GET['set'] ?? null;
 
 // Jika tipe katalog nya adalah buku, maka tambahkan where induk
 // ini untuk memfilter data buku berdasarkan id induk nya
 if ($tipe_katalog == Buku::TIPE) {
     $whereInduk = "AND a.induk = :INDUK";
+}
+
+// Jika ada query param "set", maka tambahkan where th_terbit
+// ini untuk memfilter data buku berdasarkan th_terbit
+// NOTE : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
+if (isset($_GET['set'])) {
+    // Susun where nya
+    // Jika set nya tidak null, maka query nya menggunakan parameter
+    // Jika set nya null, maka query nya menggunakan IS NULL
+    $whereThTerbit = "AND c.th_terbit ";
+    $whereThTerbit .= ($set) ? '= :TH_TERBIT' : 'IS NULL';
 }
 
 // Query Buku
@@ -28,6 +42,7 @@ $sql = <<<SQL
               AND (a.status IS NULL OR a.status ='P' OR a.status ='*' OR a.status ='D')
               AND (a.copy_ke = '1' OR a.copy_ke IS NULL) 
               $whereInduk
+              $whereThTerbit
             ORDER BY c.th_terbit DESC
         ) x WHERE rownum <= :MAX_ROW
     ) WHERE rnum >= :MIN_ROW
@@ -43,6 +58,11 @@ $paramBinding = [
 // Masukkan id katalog sebagai param "INDUK", jika where induk nya tidak kosong
 if ($whereInduk) {
     $paramBinding['INDUK'] = $id_katalog;
+}
+
+// Masukkan $set sebagai param "TH_TERBIT", jika where th terbit nya tidak kosong
+if ($whereThTerbit) {
+    $paramBinding['TH_TERBIT'] = $set;
 }
 
 
