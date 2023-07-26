@@ -22,8 +22,12 @@ class OAIPMH
             return compact('tipe_katalog', 'id_katalog');
         }
 
-        // Contoh isi dari identifier
-        // oai:library.dinamika.ac.id:book-23530
+        /** Contoh isi dari query param identifier 
+         * oai:library.dinamika.ac.id:book-23530
+         * oai:library.dinamika.ac.id:magz-15486
+         * oai:library.dinamika.ac.id:soft-13516
+         * oai:library.dinamika.ac.id:akhr-24879
+         */
 
         // Pecah identifier nya berdasarkan string ':'
         $identifier = explode(':', $identifier);
@@ -65,6 +69,14 @@ class OAIPMH
             // Return variabel2 ini sebagai array
             return compact('min_row', 'max_row', 'next_resumption_token');
         }
+
+        /** Contoh nilai dari query param resumptionToken adalah seperti berikut : 
+         * (encrypt) : def5020098c21089ba0ffa82f56c9e116d677a78...
+         * (decrypt) : 26~50
+         * 
+         * (encrypt) : def50200a69caf1a1e63dbdefe38ed34931eb1e5...
+         * (decrypt) : 51~75
+         */
 
         /* Kalo query param resumptionToken nya ada, maka */
         // Lakukan decrypt terhadap resumptionToken
