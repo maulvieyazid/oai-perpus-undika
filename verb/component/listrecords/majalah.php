@@ -81,6 +81,11 @@ foreach ($result as $majalah) {
     $majalah = (object) $majalah; // <- Cast Array to Object
     $tipe = Majalah::TIPE;
 
+    // Key "__custom" bertujuan agar bisa mendefine nama key yg sama, dalam hal ini yaitu "record"
+    // karena bila ada dua / lebih key dengan nama yg sama, maka yg tampil hanya satu key saja
+    // Untuk mengetahui lebih detil cara penggunaan custom key, silahkan lihat dokumentasi berikut.
+    // https://github.com/spatie/array-to-xml#using-custom-keys
+
     // Karena file ini digunakan untuk mengisi GetRecord dan ListRecords, 
     // maka key array nya menggunakan verb nya langsung
     $data[$verb]["__custom:record:{$helper->random_unique_id()}"] = [
