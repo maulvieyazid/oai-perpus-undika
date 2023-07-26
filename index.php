@@ -33,12 +33,9 @@ if (!!$metadataPrefix) {
 /* ==================================================================== */
 /* PENGECEKAN QUERY PARAM VERB NYA */
 /* ==================================================================== */
-if ($verb == 'ListRecords') {
-    include_once "verb/listrecords.php";
-}
 
 // Karena format <record> pada GetRecord sama dengan ListRecords, maka dari itu include nya jadi satu dengan ListRecords
-if ($verb == 'GetRecord') {
+if ($verb == 'ListRecords' || $verb == 'GetRecord') {
     include_once "verb/listrecords.php";
 }
 
