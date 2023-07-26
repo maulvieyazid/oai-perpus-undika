@@ -47,8 +47,6 @@ include_once "component/listrecords/tugas_akhir.php";
 $data[$verb]['resumptionToken'] = [
     '_attributes' => [
         'expirationDate' => $helper->parseDateStringToGranularity('tomorrow'),
-        'completeListSize' => 43836,
-        'cursor' => 0,
     ],
     '_value' => $next_resumption_token,
 ];
