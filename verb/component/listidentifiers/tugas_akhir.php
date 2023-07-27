@@ -8,16 +8,13 @@ use Model\TugasAkhir;
 
 $whereThTerima = null;
 
-$set = $_GET['set'] ?? null;
-
 // Jika ada query param "set", maka tambahkan where th_terima
 // ini untuk memfilter data tugas akhir berdasarkan th_terima
-// WARNING : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
-if (isset($_GET['set'])) {
+if ($set) {
     // Susun where nya
-    // Jika set nya tidak null, maka query nya menggunakan parameter
-    // Jika set nya null, maka query nya menggunakan IS NULL
-    $whereThTerima = ($set)
+    // Jika set nya bukan "-", maka query nya menggunakan parameter
+    // Jika set nya "-", maka query nya menggunakan IS NULL
+    $whereThTerima = ($set != '-')
         ? "AND TO_CHAR(tgl_terima, 'YYYY') = :TH_TERIMA"
         : 'AND tgl_terima IS NULL';
 }
@@ -60,7 +57,7 @@ foreach ($result as $tugas) {
     $data['ListIdentifiers']["__custom:header:{$helper->random_unique_id()}"] = [
         'identifier' => "oai:library.dinamika.ac.id:{$tipe}-{$tugas->INDUK}",
         'datestamp'  => $helper->parseDateStringToGranularity($tugas->TGL_TERIMA),
-        'setSpec'    => $tugas->TH_TERIMA ?? '',
+        'setSpec'    => $tugas->TH_TERIMA ?? '-',
     ];
 }
 

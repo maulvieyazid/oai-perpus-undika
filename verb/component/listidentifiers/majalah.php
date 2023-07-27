@@ -8,17 +8,14 @@ use Model\Majalah;
 
 $whereThTerbit = null;
 
-$set = $_GET['set'] ?? null;
-
 // Jika ada query param "set", maka tambahkan where th_terbit
 // ini untuk memfilter data majalah berdasarkan th_terbit
-// NOTE : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
-if (isset($_GET['set'])) {
+if ($set) {
     // Susun where nya
-    // Jika set nya tidak null, maka query nya menggunakan parameter
-    // Jika set nya null, maka query nya menggunakan IS NULL
+    // Jika set nya bukan "-", maka query nya menggunakan parameter
+    // Jika set nya "-", maka query nya menggunakan IS NULL
     $whereThTerbit = "AND c.th_terbit ";
-    $whereThTerbit .= ($set) ? '= :TH_TERBIT' : 'IS NULL';
+    $whereThTerbit .= ($set != '-') ? '= :TH_TERBIT' : 'IS NULL';
 }
 
 // Query Majalah
@@ -62,7 +59,7 @@ foreach ($result as $majalah) {
     $data['ListIdentifiers']["__custom:header:{$helper->random_unique_id()}"] = [
         'identifier' => "oai:library.dinamika.ac.id:{$tipe}-{$majalah->INDUK}",
         'datestamp'  => $helper->parseDateStringToGranularity($majalah->TGL_DATANG),
-        'setSpec'    => $majalah->TH_TERBIT ?? '',
+        'setSpec'    => $majalah->TH_TERBIT ?? '-',
     ];
 }
 
