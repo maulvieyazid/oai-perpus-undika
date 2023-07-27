@@ -9,8 +9,6 @@ use Model\TugasAkhir;
 $whereInduk = null;
 $whereThTerima = null;
 
-$set = $_GET['set'] ?? null;
-
 // Jika tipe katalog nya adalah tugas akhir, maka tambahkan where induk
 // ini untuk memfilter data tugas akhir berdasarkan id induk nya
 if ($tipe_katalog == TugasAkhir::TIPE) {
@@ -19,12 +17,11 @@ if ($tipe_katalog == TugasAkhir::TIPE) {
 
 // Jika ada query param "set", maka tambahkan where th_terima
 // ini untuk memfilter data tugas akhir berdasarkan th_terima
-// WARNING : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
-if (isset($_GET['set'])) {
+if ($set) {
     // Susun where nya
-    // Jika set nya tidak null, maka query nya menggunakan parameter
-    // Jika set nya null, maka query nya menggunakan IS NULL
-    $whereThTerima = ($set)
+    // Jika set nya bukan "-", maka query nya menggunakan parameter
+    // Jika set nya "-", maka query nya menggunakan IS NULL
+    $whereThTerima = ($set != '-')
         ? "AND TO_CHAR(tgl_terima, 'YYYY') = :TH_TERIMA"
         : 'AND tgl_terima IS NULL';
 }
@@ -91,7 +88,7 @@ foreach ($result as $tugas) {
         'header' => [
             'identifier' => "oai:library.dinamika.ac.id:{$tipe}-{$tugas->INDUK}",
             'datestamp'  => $helper->parseDateStringToGranularity($tugas->TGL_TERIMA),
-            'setSpec'    => $tugas->TH_TERIMA ?? '',
+            'setSpec'    => $tugas->TH_TERIMA ?? '-',
         ],
         'metadata' => [
             // Seluruh attribut yang perlu ditampilkan pada OAI ini adalah hasil diskusi / kesepakatan dengan mas Agung Perpus

@@ -2,8 +2,6 @@
 
 use Helper\OAIPMH;
 
-$helper = new Helper\Helper;
-
 // Init Connection
 $db = Core\DB::setConnection('oracle');
 
@@ -24,6 +22,11 @@ $resumptionToken =  (object) OAIPMH::getResumptionToken();
 $min_row = $resumptionToken->min_row;
 $max_row = $resumptionToken->max_row;
 $next_resumption_token = $resumptionToken->next_resumption_token;
+
+
+$helper = new Helper\Helper;
+
+$set = $_GET['set'] ?? null;
 
 
 /**

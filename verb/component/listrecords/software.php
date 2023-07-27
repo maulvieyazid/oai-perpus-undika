@@ -9,8 +9,6 @@ use Model\Software;
 $whereInduk = null;
 $whereThTerbit = null;
 
-$set = $_GET['set'] ?? null;
-
 // Jika tipe katalog nya adalah software, maka tambahkan where induk
 // ini untuk memfilter data software berdasarkan id induk nya
 if ($tipe_katalog == Software::TIPE) {
@@ -19,13 +17,12 @@ if ($tipe_katalog == Software::TIPE) {
 
 // Jika ada query param "set", maka tambahkan where th_terbit
 // ini untuk memfilter data software berdasarkan th_terbit
-// NOTE : JANGAN MERUBAH $_GET['set'] MENJADI $set, KARENA PENGECEKANNYA BISA BERUBAH
-if (isset($_GET['set'])) {
+if ($set) {
     // Susun where nya
-    // Jika set nya tidak null, maka query nya menggunakan parameter
-    // Jika set nya null, maka query nya menggunakan IS NULL
+    // Jika set nya bukan "-", maka query nya menggunakan parameter
+    // Jika set nya "-", maka query nya menggunakan IS NULL
     $whereThTerbit = "AND c.th_terbit ";
-    $whereThTerbit .= ($set) ? '= :TH_TERBIT' : 'IS NULL';
+    $whereThTerbit .= ($set != '-') ? '= :TH_TERBIT' : 'IS NULL';
 }
 
 // Query Software
@@ -92,7 +89,7 @@ foreach ($result as $software) {
         'header' => [
             'identifier' => "oai:library.dinamika.ac.id:{$tipe}-{$software->INDUK}",
             'datestamp'  => $helper->parseDateStringToGranularity($software->TGL_DATANG),
-            'setSpec'    => $software->TH_TERBIT ?? '',
+            'setSpec'    => $software->TH_TERBIT ?? '-',
         ],
         'metadata' => [
             // Seluruh attribut yang perlu ditampilkan pada OAI ini adalah hasil diskusi / kesepakatan dengan mas Agung Perpus
