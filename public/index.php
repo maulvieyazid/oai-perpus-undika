@@ -1,6 +1,6 @@
 <?php
 // Ini adalah file entri untuk semua dependensi
-require_once "app.php";
+require_once __DIR__ . "/../app.php";
 
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -36,23 +36,23 @@ if (!!$metadataPrefix) {
 
 // Karena format <record> pada GetRecord sama dengan ListRecords, maka dari itu include nya jadi satu dengan ListRecords
 if ($verb == 'ListRecords' || $verb == 'GetRecord') {
-    include_once "verb/listrecords.php";
+    include_once __DIR__ . "/../verb/listrecords.php";
 }
 
 if ($verb == 'Identify') {
-    include_once "verb/identify.php";
+    include_once __DIR__ . "/../verb/identify.php";
 }
 
 if ($verb == 'ListSets') {
-    include_once "verb/listsets.php";
+    include_once __DIR__ . "/../verb/listsets.php";
 }
 
 if ($verb == 'ListMetadataFormats') {
-    include_once "verb/listmetadataformats.php";
+    include_once __DIR__ . "/../verb/listmetadataformats.php";
 }
 
 if ($verb == 'ListIdentifiers') {
-    include_once "verb/listidentifiers.php";
+    include_once __DIR__ . "/../verb/listidentifiers.php";
 }
 /* ==================================================================== */
 /* AKHIR PENGECEKAN QUERY PARAM VERB NYA */
@@ -75,7 +75,7 @@ $arrayToXml = new ArrayToXml(
 );
 
 // Menambahkan processing instruction agar bisa membaca file oai2.xsl
-$arrayToXml->addProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="./oai2.xsl"');
+$arrayToXml->addProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="../oai2.xsl"');
 
 // Ubah header Content-Type agar browser dapat membaca / merender output menjadi XML
 header('Content-Type: text/xml');
