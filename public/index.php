@@ -75,7 +75,7 @@ $arrayToXml = new ArrayToXml(
 );
 
 // Menambahkan processing instruction agar bisa membaca file oai2.xsl
-$arrayToXml->addProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="../oai2.xsl"');
+$arrayToXml->addProcessingInstruction('xml-stylesheet', 'type="text/xsl" href="./oai2.xsl"');
 
 // Ubah header Content-Type agar browser dapat membaca / merender output menjadi XML
 header('Content-Type: text/xml');
