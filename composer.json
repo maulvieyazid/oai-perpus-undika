@@ -9,9 +9,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Helper\\": "helper",
-            "Core\\": "core",
-            "Model\\": "model"
+            "Helper\\": "helper/",
+            "Core\\": "core/",
+            "Model\\": "model/"
         }
     }
 }
