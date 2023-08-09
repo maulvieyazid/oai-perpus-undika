@@ -42,7 +42,7 @@ class Helper
     static function regenerateEncryptionKeyConfig()
     {
         // Generate secret key dari package Defuse
-        $key = Defuse\Crypto\Key::createNewRandomKey()->saveToAsciiSafeString();
+        $key = \Defuse\Crypto\Key::createNewRandomKey()->saveToAsciiSafeString();
 
         // Taruh secret key di file
         file_put_contents(__DIR__ . '/../encrypt-secret-key.txt', $key);
