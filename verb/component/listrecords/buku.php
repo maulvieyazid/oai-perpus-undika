@@ -41,7 +41,7 @@ $sql = <<<SQL
               AND (a.copy_ke = '1' OR a.copy_ke IS NULL) 
               $whereInduk
               $whereThTerbit
-            ORDER BY c.th_terbit DESC
+            ORDER BY a.induk ASC
         ) x WHERE rownum <= :MAX_ROW
     ) WHERE rnum >= :MIN_ROW
 SQL;

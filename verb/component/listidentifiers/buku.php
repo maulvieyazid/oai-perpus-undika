@@ -29,7 +29,7 @@ $sql = <<<SQL
               AND (a.status IS NULL OR a.status ='P' OR a.status ='*' OR a.status ='D')
               AND (a.copy_ke = '1' OR a.copy_ke IS NULL) 
               $whereThTerbit
-            ORDER BY c.th_terbit DESC
+            ORDER BY a.induk ASC
         ) x WHERE rownum <= :MAX_ROW
     ) WHERE rnum >= :MIN_ROW
 SQL;
